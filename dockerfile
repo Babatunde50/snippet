@@ -23,7 +23,7 @@ RUN make build
 FROM alpine:latest
 
 # Install dependencies
-RUN apk add --no-cache ca-certificates tzdata
+RUN apk add --no-cache ca-certificates tzdata openssl
 
 # Create non-root user for security
 RUN adduser -D -g '' appuser
@@ -34,8 +34,13 @@ WORKDIR /app
 # Copy the built binary from the builder stage
 COPY --from=builder /app/build/snippet /app/
 
-# Copy required application files
-COPY --from=builder /app/tls /app/tls
+# Create TLS directory and handle certificates
+RUN mkdir -p /app/tls
+
+# Generate self-signed certificates (they'll be used if no certs are mounted)
+RUN openssl req -x509 -newkey rsa:2048 -keyout /app/tls/key.pem -out /app/tls/cert.pem -days 365 -nodes -subj "/CN=localhost"
+
+# Copy static assets
 COPY --from=builder /app/ui /app/ui
 
 # Set ownership to the non-root user
