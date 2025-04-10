@@ -58,7 +58,7 @@ run: build
 .PHONY: run-dev
 run-dev:
 	@echo "Running in development mode..."
-	@go run $(MAIN_DIR) -dsn=$(DB_DSN)
+	@go run $(MAIN_DIR) 
 
 # Run tests
 .PHONY: test
