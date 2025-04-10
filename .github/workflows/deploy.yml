@@ -99,7 +99,9 @@ jobs:
 
       - name: Deploy to Railway
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-        run: railway up --service snippetbox --detach
+        run: |
+          railway variables set DSN=${{ secrets.RAILWAY_DATABASE_URL }}
+          railway up --service snippetbox --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           USE_PROXY: true
