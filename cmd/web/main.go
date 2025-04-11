@@ -19,9 +19,10 @@ import (
 )
 
 type config struct {
-	addr      string
-	staticDir string
-	dsn       string
+	addr       string
+	staticDir  string
+	dsn        string
+	usingProxy bool
 }
 
 type application struct {
@@ -39,14 +40,18 @@ func main() {
 
 	var cfg config
 
-	flag.StringVar(&cfg.addr, "addr", ":80", "HTTP network address")
+	flag.StringVar(&cfg.addr, "addr", ":4000", "HTTP network address")
 	flag.StringVar(&cfg.staticDir, "static-dir", "./ui/static", "Path to static assets")
 	flag.StringVar(&cfg.dsn, "dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
+	flag.BoolVar(&cfg.usingProxy, "proxy", true, "Determines whether app run on http or https")
 
 	flag.Parse()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+
+	infoLog.Printf("Using db url: %s", cfg.addr)
+	infoLog.Printf("Using proxy %t", cfg.usingProxy)
 
 	db, err := openDB(cfg.dsn)
 	if err != nil {
@@ -93,7 +98,7 @@ func main() {
 
 	infoLog.Printf("Starting server on %s", app.config.addr)
 
-	if os.Getenv("USE_PROXY") == "true" {
+	if app.config.usingProxy {
 		err = srv.ListenAndServe()
 	} else {
 		err = srv.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")

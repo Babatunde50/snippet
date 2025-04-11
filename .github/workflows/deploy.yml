@@ -57,7 +57,6 @@ jobs:
       - name: Run tests
         run: go test -v ./...
         env:
-          # Make sure the test connection uses the right host
           MYSQL_HOST: 127.0.0.1
 
       - name: Set up QEMU

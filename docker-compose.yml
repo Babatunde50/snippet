@@ -8,7 +8,10 @@ services:
     depends_on:
       - mysql
     environment:
-      - TZ=UTC
+      - TZ=UTC 
+      - PORT=4000
+      - DSN=web:pass@tcp(mysql:3306)/snippetbox?parseTime=true
+      - USE_PROXY=true
     volumes:
       - ./tls:/app/tls
     restart: unless-stopped
