@@ -50,7 +50,8 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	infoLog.Printf("Using db url: %s", cfg.addr)
+	infoLog.Printf("Using db url: %s\n", cfg.addr)
+	infoLog.Printf("Raw DSN env: %s\n", os.Getenv("DSN"))
 	infoLog.Printf("Using proxy %t", cfg.usingProxy)
 
 	db, err := openDB(cfg.dsn)

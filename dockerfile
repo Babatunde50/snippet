@@ -65,5 +65,5 @@ EXPOSE 80
 ENV TZ=UTC
 
 # Command to run the application with the ability to add flags via environment variable
-ENTRYPOINT ["/bin/sh", "-c"]
-CMD ["/app/snippet -addr=:${PORT} -dsn=${DSN} -static-dir=./ui/static -proxy=${USE_PROXY}"]
+CMD /app/snippet -addr=:${PORT} -dsn=${DSN} -static-dir=./ui/static -proxy=${USE_PROXY}
+
