@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"flag"
-	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -49,15 +48,12 @@ func main() {
 	flag.Parse()
 
 	// fallback to
-	if cfg.dsn == "" {
+	if cfg.dsn == "" || cfg.dsn == "web:pass@/snippetbox?parseTime=true" {
 		cfg.dsn = os.Getenv("DSN")
 	}
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
-
-	infoLog.Printf("dsn flag: %s\n", cfg.dsn)
-	infoLog.Printf("Raw DSN env: %s\n", os.Getenv("DSN"))
 
 	db, err := openDB(cfg.dsn)
 	if err != nil {
@@ -114,7 +110,7 @@ func main() {
 }
 
 func openDB(dsn string) (*sql.DB, error) {
-	fmt.Println(dsn, "dsn")
+
 	// Open a new database connection
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
