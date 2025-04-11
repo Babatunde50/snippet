@@ -47,6 +47,11 @@ func main() {
 
 	flag.Parse()
 
+	// fallback to
+	if cfg.dsn == "" {
+		cfg.dsn = os.Getenv("DSN")
+	}
+
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
