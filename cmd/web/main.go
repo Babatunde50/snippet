@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	"database/sql"
 	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -55,9 +56,8 @@ func main() {
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
-	infoLog.Printf("Using db url: %s\n", cfg.addr)
+	infoLog.Printf("dsn flag: %s\n", cfg.dsn)
 	infoLog.Printf("Raw DSN env: %s\n", os.Getenv("DSN"))
-	infoLog.Printf("Using proxy %t", cfg.usingProxy)
 
 	db, err := openDB(cfg.dsn)
 	if err != nil {
@@ -114,7 +114,7 @@ func main() {
 }
 
 func openDB(dsn string) (*sql.DB, error) {
-
+	fmt.Println(dsn, "dsn")
 	// Open a new database connection
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
