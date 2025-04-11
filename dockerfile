@@ -40,8 +40,6 @@ RUN mkdir -p /app/tls
 # Generate self-signed certificates (they'll be used if no certs are mounted)
 RUN openssl req -x509 -newkey rsa:2048 -keyout /app/tls/key.pem -out /app/tls/cert.pem -days 365 -nodes -subj "/CN=localhost"
 
-COPY --from=builder /app/tls /app/tls-temp
-
 RUN if [ -d "/app/tls" ]; then \
     echo "Using existing TLS certs"; \
     else \
